@@ -17,144 +17,34 @@
       <a class="brand" href="#top">France 2026</a>
       <button class="menu-button" type="button" data-menu-button aria-expanded="false">Menü</button>
       <div class="nav-links" data-nav-links>
-        <a href="#route">Route</a>
-        <a href="#heute">Heute</a>
-        <a href="#orte">Orte</a>
-        <a href="#tage">Tage</a>
-        <a href="#karte">Karte</a>
-        <a href="#packlisten">Packlisten</a>
+        <a href="#route">Route</a><a href="#orte">Orte</a><a href="#tage">Tage</a><a href="#karte">Karte</a><a href="#details">Details</a><a href="#packlisten">Packlisten</a>
       </div>
     </nav>
-
     <section class="hero-grid container">
       <div class="hero-copy">
         <p class="eyebrow">Familien-Roadtrip · 20. Juli bis 7. August 2026</p>
         <h1>Loire, Atlantik, Provence.</h1>
         <p class="lead">Ein persönlicher Urlaubsführer für eine aktive, entspannte Reise mit Kindern: wenig Pflichtprogramm, viele gute Optionen, kurze Entscheidungen vor Ort.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="#tage">Tagesplan öffnen</a>
-          <a class="button ghost" href="#kinder">Kinderauswahl</a>
-        </div>
+        <div class="hero-actions"><a class="button primary" href="#tage">Tagesplan öffnen</a><a class="button ghost" href="#details">Detailbereich</a></div>
       </div>
       <aside class="hero-card glass">
-        <span class="small-label">Reisestil</span>
-        <h2>Entspannt aktiv</h2>
-        <p>Strand, Wasser, Rad, Kanu, Surf, Kletterwald, gutes Essen, Märkte und genug Pausen.</p>
-        <dl class="quick-stats">
-          <div><dt>4</dt><dd>Personen</dd></div>
-          <div><dt>19</dt><dd>Tage</dd></div>
-          <div><dt>3</dt><dd>Stationen</dd></div>
-        </dl>
+        <span class="small-label">Reisestil</span><h2>Entspannt aktiv</h2><p>Strand, Wasser, Rad, Kanu, Surf, Kletterwald, gutes Essen, Märkte und genug Pausen.</p>
+        <dl class="quick-stats"><div><dt>4</dt><dd>Personen</dd></div><div><dt>19</dt><dd>Tage</dd></div><div><dt>3</dt><dd>Stationen</dd></div></dl>
       </aside>
     </section>
   </header>
-
   <main>
-    <section class="container intro-strip" id="route">
-      <p class="section-kicker">Route</p>
-      <h2>Eine Reise in drei Stimmungen.</h2>
-      <div class="route-timeline" id="routeTimeline"></div>
-    </section>
-
-    <section class="feature-section" id="heute">
-      <div class="container split">
-        <div>
-          <p class="section-kicker">Schnell entscheiden</p>
-          <h2>Was passt heute?</h2>
-          <p>Diese Website ist nicht als starre Planung gedacht. Sie soll euch jeden Morgen helfen, schnell eine gute Entscheidung zu treffen: aktiv, ruhig, heiß, regnerisch, hungrig oder kindergetrieben.</p>
-        </div>
-        <div class="decision-grid" id="decisionCards"></div>
-      </div>
-    </section>
-
-    <section class="container" id="orte">
-      <p class="section-kicker">Orte</p>
-      <h2>Die drei Hauptstationen</h2>
-      <div class="destination-grid" id="destinationGrid"></div>
-    </section>
-
-    <section class="container" id="tage">
-      <div class="section-heading-row">
-        <div>
-          <p class="section-kicker">Tagesplaner</p>
-          <h2>Tag für Tag</h2>
-        </div>
-        <p class="section-note">Jeder Tag hat einen entspannten Vorschlag, eine aktive Option und eine Regen-/Hitze-Alternative.</p>
-      </div>
-      <div class="day-filters" id="dayFilters"></div>
-      <div class="day-grid" id="dayGrid"></div>
-    </section>
-
-    <section class="map-section" id="karte">
-      <div class="container">
-        <p class="section-kicker">Karte & Links</p>
-        <h2>Orte, Ausflüge, Restaurants</h2>
-        <p class="section-note">Die Links öffnen Google Maps mit Suchbegriffen. So bleibt es robust, auch wenn sich konkrete Einträge oder Öffnungszeiten ändern.</p>
-        <div class="poi-toolbar" id="poiToolbar"></div>
-        <div class="poi-grid" id="poiGrid"></div>
-      </div>
-    </section>
-
-    <section class="container" id="restaurants">
-      <p class="section-kicker">Essen & Kaffee</p>
-      <h2>Unkompliziert essen, gut frühstücken, Kaffee finden.</h2>
-      <div class="food-grid" id="foodGrid"></div>
-    </section>
-
-    <section class="kids-section" id="kinder">
-      <div class="container split">
-        <div>
-          <p class="section-kicker">Kinderbereich</p>
-          <h2>Was wählen wir heute?</h2>
-          <p>Eine schnelle Auswahl für Oskar und seine Schwester: keine lange Diskussion, sondern ein paar greifbare Optionen.</p>
-        </div>
-        <div class="kids-choice-grid" id="kidsChoices"></div>
-      </div>
-    </section>
-
-    <section class="container" id="packlisten">
-      <div class="section-heading-row">
-        <div>
-          <p class="section-kicker">Vorbereitung</p>
-          <h2>Packlisten</h2>
-        </div>
-        <p class="section-note">Abhakbar im Browser. Der Status bleibt lokal auf dem Gerät gespeichert.</p>
-      </div>
-      <div class="packing-grid" id="packingGrid"></div>
-    </section>
-
-    <section class="journal-section" id="tagebuch">
-      <div class="container split">
-        <div>
-          <p class="section-kicker">Urlaubstagebuch</p>
-          <h2>Nach dem Urlaub wird daraus euer Erinnerungsalbum.</h2>
-          <p>Die Notizen werden lokal im Browser gespeichert. Für echte Fotos später einfach Bilddateien ins Repo legen und im Tagebuch ergänzen.</p>
-        </div>
-        <form class="journal-form" id="journalForm">
-          <label>Tag
-            <select id="journalDay"></select>
-          </label>
-          <label>Was war besonders?
-            <textarea id="journalText" rows="6" placeholder="Eis am Loireufer, erster Surfkurs, beste Croissants ..."></textarea>
-          </label>
-          <button class="button primary" type="submit">Notiz speichern</button>
-          <p class="save-hint" id="journalHint" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
+    <section class="container intro-strip" id="route"><p class="section-kicker">Route</p><h2>Eine Reise in drei Stimmungen.</h2><div class="route-timeline" id="routeTimeline"></div></section>
+    <section class="container" id="orte"><p class="section-kicker">Orte</p><h2>Die drei Hauptstationen</h2><div class="destination-grid" id="destinationGrid"></div></section>
+    <section class="feature-section" id="tage"><div class="container"><div class="section-heading-row"><div><p class="section-kicker">Tagesplaner</p><h2>Tag für Tag</h2></div><p class="section-note">Jeder Tag ist klickbar und öffnet unten eine ausführliche Detailansicht.</p></div><div class="day-filters" id="dayFilters"></div><div class="day-grid" id="dayGrid"></div></div></section>
+    <section class="map-section" id="karte"><div class="container"><p class="section-kicker">Karte & Ausflüge</p><h2>Orte, Strände, Ausflüge, Hotelzonen</h2><p class="section-note">Jede Karte öffnet eine Detailansicht plus Google-Maps-Suche.</p><div class="poi-toolbar" id="poiToolbar"></div><div class="poi-grid" id="poiGrid"></div></div></section>
+    <section class="container" id="restaurants"><p class="section-kicker">Essen & Kaffee</p><h2>Unkompliziert essen, gut frühstücken, Kaffee finden.</h2><div class="food-grid" id="foodGrid"></div></section>
+    <section class="detail-deep-section" id="details"><div class="container"><p class="section-kicker">Detailansicht</p><div id="deepDetail" class="deep-detail"><h2>Wähle oben einen Tag, Ort, Ausflug oder Restaurantvorschlag.</h2><p>Hier erscheinen ausführliche Infos, Tipps, Kartenlinks und ein persönliches Fazit.</p></div></div></section>
+    <section class="kids-section" id="kinder"><div class="container split"><div><p class="section-kicker">Kinderbereich</p><h2>Was wählen wir heute?</h2><p>Eine schnelle Auswahl für Oskar und seine Schwester.</p></div><div class="kids-choice-grid" id="kidsChoices"></div></div></section>
+    <section class="container" id="packlisten"><div class="section-heading-row"><div><p class="section-kicker">Vorbereitung</p><h2>Packlisten</h2></div><p class="section-note">Abhakbar im Browser. Der Status bleibt lokal auf dem Gerät gespeichert.</p></div><div class="packing-grid" id="packingGrid"></div></section>
+    <section class="journal-section" id="tagebuch"><div class="container split"><div><p class="section-kicker">Urlaubstagebuch</p><h2>Nach dem Urlaub wird daraus euer Erinnerungsalbum.</h2><p>Die Notizen werden lokal im Browser gespeichert.</p></div><form class="journal-form" id="journalForm"><label>Tag<select id="journalDay"></select></label><label>Was war besonders?<textarea id="journalText" rows="6" placeholder="Eis am Loireufer, erster Surfkurs, beste Croissants ..."></textarea></label><button class="button primary" type="submit">Notiz speichern</button><p class="save-hint" id="journalHint" aria-live="polite"></p></form></div></section>
   </main>
-
-  <footer class="site-footer">
-    <div class="container footer-grid">
-      <div>
-        <strong>France 2026</strong>
-        <p>Persönlicher Familien-Roadtrip-Guide.</p>
-      </div>
-      <a href="#top">Zurück nach oben</a>
-    </div>
-  </footer>
-
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <footer class="site-footer"><div class="container footer-grid"><div><strong>France 2026</strong><p>Persönlicher Familien-Roadtrip-Guide.</p></div><a href="#top">Zurück nach oben</a></div></footer>
+  <script src="data.js"></script><script src="app.js"></script>
 </body>
 </html>
