@@ -159,8 +159,20 @@ section { padding: 88px 0; }
 .check-item span { color: var(--muted); }
 
 .kids-section { background: linear-gradient(135deg, #f7dfb9, #dff3ee); }
-.choice-card { min-height: 150px; }
-.choice-card .emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
+.kids-section .split { grid-template-columns: .7fr 1.5fr; }
+.kids-choice-grid { grid-template-columns: repeat(2,minmax(0,1fr)); align-items: stretch; }
+.choice-card.kid-card { min-height: 0; padding: 20px; display: grid; gap: 14px; }
+.kid-card-head { display: flex; align-items: flex-start; gap: 12px; }
+.kid-card-head .emoji { font-size: 2.35rem; line-height: 1; display: block; margin: 0; }
+.kid-card-head strong { margin: 0 0 4px; font-size: 1.08rem; }
+.kid-card-head span:last-child { display: inline-flex; border-radius: 999px; padding: 4px 9px; background: rgba(23,107,135,.11); color: var(--blue); font-size: .72rem; font-weight: 900; }
+.kid-rules { display: grid; gap: 8px; }
+.kid-rules p { padding: 10px 12px; border-radius: 16px; background: rgba(255,255,255,.58); }
+.kid-rules b, .kid-mission b, .kid-parent b { color: var(--ink); }
+.kid-mission { border-radius: 18px; padding: 12px 14px; background: rgba(95,141,78,.14); color: rgba(23,32,42,.78); font-weight: 700; }
+.kid-parent { font-size: .92rem; }
+.kid-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.kid-links a { display: inline-flex; align-items: center; min-height: 34px; padding: 0 12px; border-radius: 999px; background: var(--ink); color: white; font-size: .78rem; font-weight: 900; }
 
 .journal-form { display: grid; gap: 14px; }
 .journal-form label { display: grid; gap: 8px; font-weight: 900; }
@@ -173,7 +185,7 @@ section { padding: 88px 0; }
 .site-footer a { color: rgba(255,255,255,.72); font-weight: 800; }
 
 @media (max-width: 980px) {
-  .hero-grid, .split { grid-template-columns: 1fr; }
+  .hero-grid, .split, .kids-section .split { grid-template-columns: 1fr; }
   .route-timeline, .destination-grid, .day-grid, .poi-grid, .food-grid, .packing-grid { grid-template-columns: repeat(2,1fr); }
 }
 @media (max-width: 720px) {
