@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>France 2026 Detail</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body{background:#fff8ea}.detail-page{padding:32px 0 80px}.back-link{display:inline-block;margin:24px 0;font-weight:900;color:#176b87}.detail-card{background:rgba(255,255,255,.86);border:1px solid rgba(23,32,42,.12);border-radius:28px;box-shadow:0 24px 70px rgba(23,32,42,.13);padding:32px}.detail-grid{display:grid;grid-template-columns:minmax(0,1.45fr)340px;gap:28px;align-items:start}.detail-lead{font-size:1.18rem}.detail-card p,.detail-card li,.side-card p{color:#657286}.side-card{background:rgba(255,255,255,.72);border:1px solid rgba(23,32,42,.12);border-radius:22px;padding:20px;margin-bottom:16px}.side-card a{display:block;color:#176b87;font-weight:900;padding:8px 0;border-bottom:1px solid rgba(23,32,42,.08)}.maps-button{display:inline-flex;width:100%;align-items:center;justify-content:center;min-height:46px;border-radius:999px;background:#17202a;color:white;font-weight:900;margin-bottom:16px}@media(max-width:900px){.detail-grid{grid-template-columns:1fr}.detail-card{padding:22px}}
+  </style>
+</head>
+<body>
+  <main class="container detail-page">
+    <a class="back-link" href="index.html">← Zur Übersicht</a>
+    <article id="detailRoot" class="detail-card"><p>Lade Detailseite...</p></article>
+  </main>
+  <script src="data.js"></script>
+  <script>
+    const data = window.FRANCE2026;
+    const params = new URLSearchParams(location.search);
+    const type = params.get('type');
+    const id = params.get('id');
+    const root = document.querySelector('#detailRoot');
+    const mapsLink = query => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+    const links = arr => !arr || !arr.length ? '' : `<div class="side-card"><h3>Links</h3>${arr.map(l => `<a href="${mapsLink(l.query)}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>`;
+    const list = arr => `<ul>${(arr||[]).map(x => `<li>${x}</li>`).join('')}</ul>`;
+    function verdict(item){ if(item.type==='Strand') return 'Sehr passend, solange ihr Strömung, Sonne und Pausen ernst nehmt. Vormittag oder später Nachmittag ist meist angenehmer als Mittag.'; if(item.type==='Aktivität') return 'Sehr guter Baustein für 8 und 10 Jahre, weil daraus ein echtes Erlebnis wird.'; if(item.type==='Ausflug') return 'Lohnend, wenn ihr ihn schlank haltet: ein klares Ziel, keine zweite große Station, gute Rückkehrzeit.'; return 'Guter Baustein, wenn ihr ihn als flexible Option versteht und nicht als Pflichttermin.'; }
+    function render(title, eyebrow, body, side){ root.innerHTML = `<p class="section-kicker">${eyebrow}</p><h1>${title}</h1><div class="detail-grid"><section>${body}</section><aside>${side}<div class="side-card"><h3>Vor Ort prüfen</h3><ul><li>Öffnungszeiten</li><li>Parken</li><li>Reservierung</li><li>Hitze / Wetter</li></ul></div></aside></div>`; document.title = `${title} · France 2026`; }
+    if(type==='destination'){
+      const item = data.destinations.find(x => x.id === id);
+      render(item.title,'Stationsguide',`<p class="detail-lead">${item.deep || item.story}</p><h3>Warum das für euch passt</h3><p>${item.familyAngle || item.story}</p><h3>Highlights</h3>${list(item.highlights)}<h3>Konkrete Tipps</h3>${list(item.tips)}`,links(item.links));
+    } else if(type==='day'){
+      const item = data.days[Number(id)];
+      const related = data.pois.filter(p => p.place === item.place).slice(0,4);
+      render(item.title,`${item.date} · ${item.place}`,`<p class="detail-lead">${item.focus || item.mood}</p><h3>Entspannt</h3><p>${item.calm}</p><h3>Aktiv</h3><p>${item.active}</p><h3>Alternative</h3><p>${item.fallback}</p><h3>Einordnung</h3><p>Nutzt den Tag als Entscheidungsbaum: Energie hoch heißt aktive Variante, Hitze oder müde Kinder heißt entspannte Variante.</p>`, related.length ? `<div class="side-card"><h3>Passende Orte</h3>${related.map(p => `<a href="${mapsLink(p.query)}" target="_blank" rel="noopener">${p.name}</a>`).join('')}</div>` : '');
+    } else if(type==='poi'){
+      const item = data.pois[Number(id)];
+      render(item.name,`${item.type} · ${item.place}`,`<p class="detail-lead">${item.text}</p><h3>Warum lohnt sich das?</h3><p>${item.why || item.text}</p><h3>Praktische Tipps</h3>${list(item.tips)}<h3>Familienfazit</h3><p>${verdict(item)}</p>`,`<a class="maps-button" href="${mapsLink(item.query)}" target="_blank" rel="noopener">In Google Maps öffnen</a>${links(item.links)}`);
+    } else if(type==='food'){
+      const item = data.food[Number(id)];
+      render(item.title,`Essen · ${item.place}`,`<p class="detail-lead">${item.text}</p><h3>Warum passt das?</h3><p>${item.why || item.text}</p><h3>Tipps</h3>${list(item.tips)}<h3>Familienfazit</h3><p>Für euch zählt hier weniger maximale Kulinarik, sondern gute Stimmung, kurze Wege und planbare Kinderenergie.</p>`, item.query ? `<a class="maps-button" href="${mapsLink(item.query)}" target="_blank" rel="noopener">In Google Maps suchen</a>` : '');
+    } else {
+      root.innerHTML = '<h1>Nichts gefunden</h1><p>Zurück zur Übersicht.</p>';
+    }
+  </script>
+</body>
+</html>
