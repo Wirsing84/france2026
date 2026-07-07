@@ -68,32 +68,33 @@
     }
     function verdict(item){ if(item.type==='Strand') return 'Sehr passend, solange ihr Strömung, Sonne und Pausen ernst nehmt. Vormittag oder später Nachmittag ist meist angenehmer als Mittag.'; if(item.type==='Aktivität') return 'Sehr guter Baustein für 8 und 10 Jahre, weil daraus ein echtes Erlebnis wird.'; if(item.type==='Ausflug') return 'Lohnend, wenn ihr ihn schlank haltet: ein klares Ziel, keine zweite große Station, gute Rückkehrzeit.'; return 'Guter Baustein, wenn ihr ihn als flexible Option versteht und nicht als Pflichttermin.'; }
     function render(title, eyebrow, body, side, imageQuery){
-      root.innerHTML = `<figure class="image-hero"><img id="detailImage" alt="${title}" loading="lazy"><figcaption id="imageCredit" class="image-caption">Bild wird von Wikimedia Commons geladen …</figcaption></figure><p class="section-kicker">${eyebrow}</p><h1>${title}</h1><div class="detail-grid"><section>${body}</section><aside>${side}<div class="side-card"><h3>Vor Ort prüfen</h3><ul><li>Öffnungszeiten</li><li>Parken</li><li>Reservierung</li><li>Hitze / Wetter</li></ul></div></aside></div>`;
+      root.innerHTML = `<figure class="image-hero"><img id="detailImage" alt="${title}" loading="lazy"><figcaption id="imageCredit" class="image-caption">Bild extern geladen über LoremFlickr</figcaption></figure><p class="section-kicker">${eyebrow}</p><h1>${title}</h1><div class="detail-grid"><section>${body}</section><aside>${side}<div class="side-card"><h3>Vor Ort prüfen</h3><ul><li>Öffnungszeiten</li><li>Parken</li><li>Reservierung</li><li>Hitze / Wetter</li></ul></div></aside></div>`;
       document.title = `${title} · France 2026`;
-      loadCommonsImage(imageQuery || title);
+      loadExternalImage(imageQuery || title, title);
     }
-    async function loadCommonsImage(query){
+    function loadExternalImage(query, title){
       const img = document.querySelector('#detailImage');
       const credit = document.querySelector('#imageCredit');
-      if(!img || !query) return;
-      const api = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=8&gsrsearch=${encodeURIComponent(query)}&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1600&format=json&origin=*`;
-      try {
-        const res = await fetch(api);
-        const json = await res.json();
-        const pages = Object.values(json.query?.pages || {}).filter(p => p.imageinfo && p.imageinfo[0] && (p.imageinfo[0].thumburl || p.imageinfo[0].url));
-        const page = pages[0];
-        if(!page) throw new Error('no image');
-        const info = page.imageinfo[0];
-        img.src = info.thumburl || info.url;
-        const artist = stripHtml(info.extmetadata?.Artist?.value || 'Wikimedia Commons');
-        const license = stripHtml(info.extmetadata?.LicenseShortName?.value || 'freie Mediendatei');
-        credit.textContent = `Bild: ${page.title.replace('File:', '')} · ${artist} · ${license}`;
-      } catch(e) {
-        img.remove();
-        if(credit) credit.textContent = `Kein passendes Commons-Bild automatisch gefunden für: ${query}`;
-      }
+      const tags = imageTags(query, title);
+      img.src = `https://loremflickr.com/1600/900/${tags}?lock=${Math.abs(hashCode(title + tags)) % 9999}`;
+      img.onerror = () => { img.src = `https://picsum.photos/seed/${encodeURIComponent(title)}/1600/900`; };
+      credit.textContent = `Bild extern geladen · Suchthema: ${tags.replaceAll(',', ' / ')}`;
     }
-    function stripHtml(value){ return String(value).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim(); }
+    function imageTags(query, title){
+      const q = `${query || ''} ${title || ''}`.toLowerCase();
+      if(q.includes('surf')) return 'surf,france,ocean';
+      if(q.includes('plage') || q.includes('moliets') || q.includes('biarritz') || q.includes('capbreton') || q.includes('ciotat') || q.includes('cassis') || q.includes('strand')) return 'beach,france,ocean';
+      if(q.includes('lac') || q.includes('léon') || q.includes('leon')) return 'lake,france,nature';
+      if(q.includes('courant') || q.includes('huchet') || q.includes('vouvray') || q.includes('canoe') || q.includes('kanu') || q.includes('loire')) return 'river,france,nature';
+      if(q.includes('market') || q.includes('markt') || q.includes('halles')) return 'market,france,food';
+      if(q.includes('restaurant') || q.includes('café') || q.includes('cafe') || q.includes('essen') || q.includes('food')) return 'restaurant,france,food';
+      if(q.includes('luberon') || q.includes('gordes') || q.includes('roussillon')) return 'provence,village,france';
+      if(q.includes('sainte') || q.includes('victoire') || q.includes('roques')) return 'provence,mountain,france';
+      if(q.includes('aix') || q.includes('tours') || q.includes('bayonne')) return 'france,city,street';
+      if(q.includes('tholonet') || q.includes('provence') || q.includes('calisson')) return 'provence,france';
+      return 'france,travel,roadtrip';
+    }
+    function hashCode(s){ return String(s).split('').reduce((a,c)=>((a<<5)-a)+c.charCodeAt(0),0); }
     function destinationImageQuery(item){ if(item.id === 'tours') return 'Tours Loire France'; if(item.id === 'moliets') return 'Moliets et Maa plage'; if(item.id === 'tholonet') return 'Montagne Sainte Victoire Provence'; return item.title + ' France'; }
     if(type==='destination'){
       const item = data.destinations.find(x => x.id === id);
