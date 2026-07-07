@@ -52,7 +52,78 @@ function renderPois() {
 function renderFood() {
   $('#foodGrid').innerHTML = data.food.map((item, i) => `<article class="food-card"><span class="small-label">${item.place}</span><h3>${item.title}</h3><p>${item.text}</p>${detailLink('food', i)}</article>`).join('');
 }
-function renderKids() { $('#kidsChoices').innerHTML = data.kids.map(item => `<article class="choice-card"><span class="emoji">${item.emoji}</span><strong>${item.title}</strong><p>${item.text}</p></article>`).join(''); }
+
+const kidCards = [
+  {
+    emoji: '🌊', title: 'Wellen-Check & Bodyboard', tag: 'Moliets · Strand',
+    choose: 'wenn ihr richtig Lust auf Meer, Sand und Action habt.',
+    avoid: 'wenn jemand müde ist, die Flagge schlecht steht oder die Sonne gerade knallt.',
+    mission: 'Findet die Wellenampel: Wie stark sind Wellen, Wind und Strömung heute?',
+    parents: 'UV-Shirts, Wasser, klare Strandgrenze und vorher erklären, wo man rein darf.',
+    links: [{ label: 'Erster Atlantiktag', href: detailUrl('day', 4) }, { label: 'Plage Centrale', href: mapsLink('Plage Centrale Moliets et Maa') }]
+  },
+  {
+    emoji: '🏄', title: 'Surfkurs oder Surf-Schnuppern', tag: 'Moliets · Mutprobe',
+    choose: 'wenn ihr etwas Neues lernen wollt und euch Fallen-ins-Wasser nicht stört.',
+    avoid: 'wenn der Tag sowieso schon voll ist. Surf macht müde.',
+    mission: 'Nach dem Kurs kann jeder eine Sache zeigen: Paddeln, Aufstehen oder Wellenlesen.',
+    parents: 'Früh in der Woche klären, damit ein zweiter Termin möglich bleibt.',
+    links: [{ label: 'Surf & Pinien', href: detailUrl('day', 5) }, { label: 'Surf Schools suchen', href: mapsLink('surf school Moliets et Maa kids') }]
+  },
+  {
+    emoji: '🚣', title: 'Kanu auf der Loire', tag: 'Tours · Abenteuer',
+    choose: 'wenn ihr Bewegung wollt, aber keine laute Action braucht.',
+    avoid: 'wenn es sehr heiß ist oder alle schon genervt von Logistik sind.',
+    mission: 'Zählt drei Dinge, die man nur vom Wasser aus sieht: Vögel, Brücken, Sandbänke.',
+    parents: 'Wasserschuhe, Wechselkleidung, Sonnencreme und genug Wasser einplanen.',
+    links: [{ label: 'Kanu-Tag', href: detailUrl('day', 2) }, { label: 'Kanu Vouvray', href: mapsLink('canoe Vouvray Tours Loire') }]
+  },
+  {
+    emoji: '🌲', title: 'Kletterwald-Challenge', tag: 'Moliets · Energie raus',
+    choose: 'wenn ihr klettern, balancieren und euch etwas trauen wollt.',
+    avoid: 'wenn Arme und Beine vom Strandtag schon leer sind.',
+    mission: 'Jeder wählt eine faire Challenge: mutig, aber nicht übertrieben.',
+    parents: 'Vorher Alter/Größe, Slots, Schatten und Handschuhe prüfen.',
+    links: [{ label: 'Adrenaline Parc Tag', href: detailUrl('day', 7) }, { label: 'Adrenaline Parc', href: mapsLink('Adrenaline Parc Moliets') }]
+  },
+  {
+    emoji: '🦎', title: 'Naturforscher-Tag', tag: 'Lac de Léon · Courant d’Huchet',
+    choose: 'wenn ihr Wasser wollt, aber nicht schon wieder nur Strand.',
+    avoid: 'wenn alle eigentlich Wellen und Eis erwarten.',
+    mission: 'Sucht fünf Naturzeichen: Spur, Feder, Libelle, Schattenplatz, besonderer Baum.',
+    parents: 'Mückenschutz, Picknick, Reserve-Regeln und Bootsmöglichkeiten vorher prüfen.',
+    links: [{ label: 'Courant d’Huchet', href: detailUrl('day', 6) }, { label: 'Lac de Léon', href: mapsLink('Lac de Leon Landes') }]
+  },
+  {
+    emoji: '🍦', title: 'Stadt-Detektive mit Eis-Finale', tag: 'Aix · Bayonne · Tours',
+    choose: 'wenn ihr bummeln könnt, aber eine klare Belohnung wollt.',
+    avoid: 'wenn es mittags heiß ist oder niemand Lust auf Gassen hat.',
+    mission: 'Findet: einen Brunnen, eine besondere Tür, etwas Süßes, einen Platz im Schatten.',
+    parents: 'Stadtzeit kurz halten. Erst Markt/Gassen, dann Eis, dann raus.',
+    links: [{ label: 'Aix locker', href: detailUrl('day', 11) }, { label: 'Bayonne Ausflug', href: detailUrl('day', 8) }]
+  },
+  {
+    emoji: '🎲', title: 'Airbnb-Reset', tag: 'Müde · heiß · Regen',
+    choose: 'wenn keiner mehr Programm braucht und genau das der beste Plan ist.',
+    avoid: 'wenn nur Langeweile da ist und eigentlich Bewegung helfen würde.',
+    mission: 'Wählt ein Turnier: Karten, Würfel, Lesen, Pool-Challenge oder Ferien-Tagebuch.',
+    parents: 'Nicht als Scheitern werten. Leerlauf rettet oft den nächsten Tag.',
+    links: [{ label: 'Pool & Provence', href: detailUrl('day', 14) }, { label: 'Packlisten prüfen', href: '#packlisten' }]
+  },
+  {
+    emoji: '⭐', title: 'Favoritentag', tag: 'Wiederholen statt mehr',
+    choose: 'am letzten Tag einer Station: das Beste nochmal machen.',
+    avoid: 'wenn jemand noch unbedingt etwas Neues sehen will.',
+    mission: 'Jeder sagt eine Sache, die nochmal passieren soll. Dann wird abgestimmt.',
+    parents: 'Gerade am Ende nicht überladen. Wiederholung fühlt sich für Kinder oft besser an.',
+    links: [{ label: 'Letzter Atlantiktag', href: detailUrl('day', 9) }, { label: 'Letzter Provence-Tag', href: detailUrl('day', 16) }]
+  }
+];
+
+function renderKids() {
+  $('#kidsChoices').innerHTML = kidCards.map(card => `<article class="choice-card kid-card"><div class="kid-card-head"><span class="emoji">${card.emoji}</span><div><strong>${card.title}</strong><span>${card.tag}</span></div></div><div class="kid-rules"><p><b>Wählt das, wenn:</b> ${card.choose}</p><p><b>Lieber nicht, wenn:</b> ${card.avoid}</p></div><div class="kid-mission"><b>Auftrag für euch:</b> ${card.mission}</div><p class="kid-parent"><b>Elterncheck:</b> ${card.parents}</p><div class="kid-links">${card.links.map(link => `<a href="${link.href}" ${link.href.startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>${link.label}</a>`).join('')}</div></article>`).join('');
+}
+
 function renderPacking() {
   $('#packingGrid').innerHTML = data.packing.map((group, groupIndex) => `<article class="pack-card"><h3>${group.title}</h3><div>${group.items.map((item, itemIndex) => { const id = `pack-${groupIndex}-${itemIndex}`; const checked = safeGet(id) === 'true' ? 'checked' : ''; return `<label class="check-item"><input type="checkbox" data-pack-id="${id}" ${checked}><span>${item}</span></label>`; }).join('')}</div></article>`).join('');
   $$('[data-pack-id]').forEach(input => input.addEventListener('change', () => safeSet(input.dataset.packId, input.checked)));
