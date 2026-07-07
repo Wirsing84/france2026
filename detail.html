@@ -6,7 +6,7 @@
   <title>France 2026 Detail</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    body{background:#fff8ea}.detail-page{padding:32px 0 80px}.back-link{display:inline-block;margin:24px 0;font-weight:900;color:#176b87}.detail-card{background:rgba(255,255,255,.86);border:1px solid rgba(23,32,42,.12);border-radius:28px;box-shadow:0 24px 70px rgba(23,32,42,.13);padding:32px}.detail-grid{display:grid;grid-template-columns:minmax(0,1.45fr)340px;gap:28px;align-items:start}.detail-lead{font-size:1.18rem}.detail-card p,.detail-card li,.side-card p{color:#657286}.side-card{background:rgba(255,255,255,.72);border:1px solid rgba(23,32,42,.12);border-radius:22px;padding:20px;margin-bottom:16px}.side-card a{display:block;color:#176b87;font-weight:900;padding:8px 0;border-bottom:1px solid rgba(23,32,42,.08)}.maps-button{display:inline-flex;width:100%;align-items:center;justify-content:center;min-height:46px;border-radius:999px;background:#17202a;color:white;font-weight:900;margin-bottom:16px}.source-note{font-size:.9rem;color:#657286;margin-top:28px}@media(max-width:900px){.detail-grid{grid-template-columns:1fr}.detail-card{padding:22px}}
+    body{background:#fff8ea}.detail-page{padding:32px 0 80px}.back-link{display:inline-block;margin:24px 0;font-weight:900;color:#176b87}.detail-card{background:rgba(255,255,255,.86);border:1px solid rgba(23,32,42,.12);border-radius:28px;box-shadow:0 24px 70px rgba(23,32,42,.13);padding:32px}.detail-grid{display:grid;grid-template-columns:minmax(0,1.45fr)340px;gap:28px;align-items:start}.detail-lead{font-size:1.18rem}.detail-card p,.detail-card li,.side-card p{color:#657286}.side-card{background:rgba(255,255,255,.72);border:1px solid rgba(23,32,42,.12);border-radius:22px;padding:20px;margin-bottom:16px}.side-card a{display:block;color:#176b87;font-weight:900;padding:8px 0;border-bottom:1px solid rgba(23,32,42,.08)}.maps-button{display:inline-flex;width:100%;align-items:center;justify-content:center;min-height:46px;border-radius:999px;background:#17202a;color:white;font-weight:900;margin-bottom:16px}.source-note{font-size:.9rem;color:#657286;margin-top:28px}.image-hero{margin:0 0 28px;border-radius:24px;overflow:hidden;background:linear-gradient(135deg,#dff3ee,#f7dfb9);border:1px solid rgba(23,32,42,.10)}.image-hero img{display:block;width:100%;height:clamp(240px,38vw,440px);object-fit:cover}.image-caption{font-size:.78rem;color:#657286;padding:10px 14px;background:rgba(255,255,255,.72)}@media(max-width:900px){.detail-grid{grid-template-columns:1fr}.detail-card{padding:22px}}
   </style>
 </head>
 <body>
@@ -67,25 +67,53 @@
       return `<p class="detail-lead">${item.focus || item.mood}</p><p>${placeText}</p><h3>So würde ich den Tag lesen</h3><p>Die entspannte Variante ist nicht der schlechtere Plan, sondern der Standard. Die aktive Variante lohnt sich, wenn alle morgens wirklich Energie haben. Die Alternative ist der Sicherheitsanker, wenn Hitze, Müdigkeit oder Fahrzeit gegen euch arbeiten.</p><h3>Entspannt</h3><p>${item.calm}</p><h3>Aktiv</h3><p>${item.active}</p><h3>Alternative</h3><p>${item.fallback}</p><h3>Meine Empfehlung für euch</h3><p>Entscheidet morgens nicht nach Pflichtgefühl, sondern nach Energie. Wenn ihr diskutieren müsst, ist meistens die kleinere Variante richtig. Mit Kindern wird ein guter halber Tag oft wertvoller als ein vollgepackter ganzer Tag.</p>`;
     }
     function verdict(item){ if(item.type==='Strand') return 'Sehr passend, solange ihr Strömung, Sonne und Pausen ernst nehmt. Vormittag oder später Nachmittag ist meist angenehmer als Mittag.'; if(item.type==='Aktivität') return 'Sehr guter Baustein für 8 und 10 Jahre, weil daraus ein echtes Erlebnis wird.'; if(item.type==='Ausflug') return 'Lohnend, wenn ihr ihn schlank haltet: ein klares Ziel, keine zweite große Station, gute Rückkehrzeit.'; return 'Guter Baustein, wenn ihr ihn als flexible Option versteht und nicht als Pflichttermin.'; }
-    function render(title, eyebrow, body, side){ root.innerHTML = `<p class="section-kicker">${eyebrow}</p><h1>${title}</h1><div class="detail-grid"><section>${body}</section><aside>${side}<div class="side-card"><h3>Vor Ort prüfen</h3><ul><li>Öffnungszeiten</li><li>Parken</li><li>Reservierung</li><li>Hitze / Wetter</li></ul></div></aside></div>`; document.title = `${title} · France 2026`; }
+    function render(title, eyebrow, body, side, imageQuery){
+      root.innerHTML = `<figure class="image-hero"><img id="detailImage" alt="${title}" loading="lazy"><figcaption id="imageCredit" class="image-caption">Bild wird von Wikimedia Commons geladen …</figcaption></figure><p class="section-kicker">${eyebrow}</p><h1>${title}</h1><div class="detail-grid"><section>${body}</section><aside>${side}<div class="side-card"><h3>Vor Ort prüfen</h3><ul><li>Öffnungszeiten</li><li>Parken</li><li>Reservierung</li><li>Hitze / Wetter</li></ul></div></aside></div>`;
+      document.title = `${title} · France 2026`;
+      loadCommonsImage(imageQuery || title);
+    }
+    async function loadCommonsImage(query){
+      const img = document.querySelector('#detailImage');
+      const credit = document.querySelector('#imageCredit');
+      if(!img || !query) return;
+      const api = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrnamespace=6&gsrlimit=8&gsrsearch=${encodeURIComponent(query)}&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=1600&format=json&origin=*`;
+      try {
+        const res = await fetch(api);
+        const json = await res.json();
+        const pages = Object.values(json.query?.pages || {}).filter(p => p.imageinfo && p.imageinfo[0] && (p.imageinfo[0].thumburl || p.imageinfo[0].url));
+        const page = pages[0];
+        if(!page) throw new Error('no image');
+        const info = page.imageinfo[0];
+        img.src = info.thumburl || info.url;
+        const artist = stripHtml(info.extmetadata?.Artist?.value || 'Wikimedia Commons');
+        const license = stripHtml(info.extmetadata?.LicenseShortName?.value || 'freie Mediendatei');
+        credit.textContent = `Bild: ${page.title.replace('File:', '')} · ${artist} · ${license}`;
+      } catch(e) {
+        img.remove();
+        if(credit) credit.textContent = `Kein passendes Commons-Bild automatisch gefunden für: ${query}`;
+      }
+    }
+    function stripHtml(value){ return String(value).replace(/<[^>]*>/g,'').replace(/\s+/g,' ').trim(); }
+    function destinationImageQuery(item){ if(item.id === 'tours') return 'Tours Loire France'; if(item.id === 'moliets') return 'Moliets et Maa plage'; if(item.id === 'tholonet') return 'Montagne Sainte Victoire Provence'; return item.title + ' France'; }
     if(type==='destination'){
       const item = data.destinations.find(x => x.id === id);
-      render(item.title,'Stationsguide',`<p class="detail-lead">${item.deep || item.story}</p><h3>Warum das für euch passt</h3><p>${item.familyAngle || item.story}</p><h3>Highlights</h3>${list(item.highlights)}<h3>Konkrete Tipps</h3>${list(item.tips)}`,links(item.links));
+      render(item.title,'Stationsguide',`<p class="detail-lead">${item.deep || item.story}</p><h3>Warum das für euch passt</h3><p>${item.familyAngle || item.story}</p><h3>Highlights</h3>${list(item.highlights)}<h3>Konkrete Tipps</h3>${list(item.tips)}`,links(item.links), destinationImageQuery(item));
     } else if(type==='day'){
       const item = data.days[Number(id)];
       const curated = dayLinks[Number(id)] || [];
       const guide = dayGuides[Number(id)];
+      const imageQuery = (guide?.links || curated)[0]?.query || `${item.title} ${item.place} France`;
       if(guide){
-        render(item.title,`${item.date} · ${item.place}`,`<div class="detail-lead">${paragraphList(guide.intro)}</div><h3>So würde ich den Tag aufbauen</h3>${list(guide.plan)}<h3>Meine Empfehlung für euch</h3><p>${guide.recommendation}</p><h3>Praktische Hinweise</h3>${list(guide.logistics)}${guide.sourceNote ? `<p class="source-note">${guide.sourceNote}</p>` : ''}`, links(guide.links || curated));
+        render(item.title,`${item.date} · ${item.place}`,`<div class="detail-lead">${paragraphList(guide.intro)}</div><h3>So würde ich den Tag aufbauen</h3>${list(guide.plan)}<h3>Meine Empfehlung für euch</h3><p>${guide.recommendation}</p><h3>Praktische Hinweise</h3>${list(guide.logistics)}${guide.sourceNote ? `<p class="source-note">${guide.sourceNote}</p>` : ''}`, links(guide.links || curated), imageQuery);
       } else {
-        render(item.title,`${item.date} · ${item.place}`,fallbackDayBody(item, Number(id)), links(curated));
+        render(item.title,`${item.date} · ${item.place}`,fallbackDayBody(item, Number(id)), links(curated), imageQuery);
       }
     } else if(type==='poi'){
       const item = data.pois[Number(id)];
-      render(item.name,`${item.type} · ${item.place}`,`<p class="detail-lead">${item.text}</p><h3>Warum lohnt sich das?</h3><p>${item.why || item.text}</p><h3>Praktische Tipps</h3>${list(item.tips)}<h3>Familienfazit</h3><p>${verdict(item)}</p>`,`<a class="maps-button" href="${mapsLink(item.query)}" target="_blank" rel="noopener">In Google Maps öffnen</a>${links(item.links)}`);
+      render(item.name,`${item.type} · ${item.place}`,`<p class="detail-lead">${item.text}</p><h3>Warum lohnt sich das?</h3><p>${item.why || item.text}</p><h3>Praktische Tipps</h3>${list(item.tips)}<h3>Familienfazit</h3><p>${verdict(item)}</p>`,`<a class="maps-button" href="${mapsLink(item.query)}" target="_blank" rel="noopener">In Google Maps öffnen</a>${links(item.links)}`, item.query);
     } else if(type==='food'){
       const item = data.food[Number(id)];
-      render(item.title,`Essen · ${item.place}`,`<p class="detail-lead">${item.text}</p><h3>Warum passt das?</h3><p>${item.why || item.text}</p><h3>Tipps</h3>${list(item.tips)}<h3>Familienfazit</h3><p>Für euch zählt hier weniger maximale Kulinarik, sondern gute Stimmung, kurze Wege und planbare Kinderenergie.</p>`, item.query ? `<a class="maps-button" href="${mapsLink(item.query)}" target="_blank" rel="noopener">In Google Maps suchen</a>` : '');
+      render(item.title,`Essen · ${item.place}`,`<p class="detail-lead">${item.text}</p><h3>Warum passt das?</h3><p>${item.why || item.text}</p><h3>Tipps</h3>${list(item.tips)}<h3>Familienfazit</h3><p>Für euch zählt hier weniger maximale Kulinarik, sondern gute Stimmung, kurze Wege und planbare Kinderenergie.</p>`, item.query ? `<a class="maps-button" href="${mapsLink(item.query)}" target="_blank" rel="noopener">In Google Maps suchen</a>` : '', item.query || item.place + ' France');
     } else {
       root.innerHTML = '<h1>Nichts gefunden</h1><p>Zurück zur Übersicht.</p>';
     }
