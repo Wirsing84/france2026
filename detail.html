@@ -24,6 +24,27 @@
     const mapsLink = query => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
     const links = arr => !arr || !arr.length ? '' : `<div class="side-card"><h3>Links</h3>${arr.map(l => `<a href="${mapsLink(l.query)}" target="_blank" rel="noopener">${l.label}</a>`).join('')}</div>`;
     const list = arr => `<ul>${(arr||[]).map(x => `<li>${x}</li>`).join('')}</ul>`;
+    const dayLinks = [
+      [{label:'Tours Loireufer',query:'Tours Loire river walk'},{label:'Guinguette de Tours',query:'Guinguette de Tours sur Loire'},{label:'Supermarkt Nähe Unterkunft',query:'supermarket Tours France'}],
+      [{label:'Les Halles de Tours',query:'Les Halles de Tours market'},{label:'Loire à Vélo Tours',query:'Loire a Velo Tours bike rental'},{label:'Guinguette de Tours',query:'Guinguette de Tours sur Loire'},{label:'Aquarium de Touraine',query:'Aquarium de Touraine'}],
+      [{label:'Kanu Vouvray',query:'canoe Vouvray Tours Loire'},{label:'Vouvray Loireufer',query:'Vouvray Loire river'},{label:'Family Park Sorigny',query:'Family Park Sorigny'}],
+      [{label:'Plage Centrale Moliets',query:'Plage Centrale Moliets et Maa'},{label:'Restaurants Moliets Plage',query:'restaurants Moliets Plage'},{label:'Supermarkt Moliets',query:'supermarket Moliets et Maa'}],
+      [{label:'Plage Centrale',query:'Plage Centrale Moliets et Maa'},{label:'Surf Schools Moliets',query:'surf school Moliets et Maa kids'},{label:'Lac de Léon',query:'Lac de Leon Landes'}],
+      [{label:'Surf Schools Moliets',query:'surf school Moliets et Maa kids'},{label:'Hossegor Cafés',query:'Hossegor cafes coffee'},{label:'Capbreton Hafen',query:'Capbreton port restaurants'}],
+      [{label:'Lac de Léon',query:'Lac de Leon Landes'},{label:'Courant d’Huchet',query:"Courant d'Huchet Moliets"},{label:'Réserve Naturelle du Courant d’Huchet',query:"Reserve naturelle Courant d'Huchet"}],
+      [{label:'Adrenaline Parc',query:'Adrenaline Parc Moliets'},{label:'Minigolf Moliets',query:'mini golf Moliets et Maa'},{label:'Plage des Chênes-Lièges',query:'Plage des Chenes Lieges Moliets'}],
+      [{label:'Bayonne Markthalle',query:'Bayonne Les Halles market'},{label:'Bayonne Schokolade',query:'Bayonne chocolate shops'},{label:'Biarritz Grande Plage',query:'Biarritz Grande Plage'},{label:'Capbreton Hafen',query:'Capbreton port'}],
+      [{label:'Plage Centrale',query:'Plage Centrale Moliets et Maa'},{label:'Surf Schools Moliets',query:'surf school Moliets et Maa kids'},{label:'Plage des Chênes-Lièges',query:'Plage des Chenes Lieges Moliets'}],
+      [{label:'Le Tholonet',query:'Le Tholonet France'},{label:'Sainte-Victoire Aussicht',query:'Montagne Sainte Victoire Le Tholonet viewpoint'},{label:'Supermarkt Le Tholonet',query:'supermarket Le Tholonet'}],
+      [{label:'Aix Markt',query:'Aix en Provence market Cours Mirabeau'},{label:'Cours Mirabeau',query:'Cours Mirabeau Aix en Provence'},{label:'Calissons Aix',query:'calissons Aix en Provence'}],
+      [{label:'Roques Hautes',query:'Roques Hautes Sainte Victoire'},{label:'Sainte-Victoire',query:'Montagne Sainte Victoire Le Tholonet'},{label:'Musée du Calisson',query:'Musee du Calisson Aix en Provence'}],
+      [{label:'La Ciotat Strand',query:'La Ciotat beach family'},{label:'Cassis Calanques Bootstour',query:'Cassis Calanques boat tour'},{label:'Côte Bleue Strand',query:'Cote Bleue beach family'}],
+      [{label:'Bäckerei Le Tholonet',query:'boulangerie Le Tholonet'},{label:'Aix Abendessen Terrasse',query:'Aix en Provence restaurant terrace family'},{label:'Aix Eis',query:'ice cream Aix en Provence'}],
+      [{label:'Luberon Dörfer',query:'Luberon villages family day trip'},{label:'Gordes',query:'Gordes France'},{label:'Aix Markt',query:'Aix en Provence market'}],
+      [{label:'Aix Lieblingsrunde',query:'Aix en Provence Cours Mirabeau'},{label:'Sainte-Victoire Abendrunde',query:'Montagne Sainte Victoire sunset viewpoint'},{label:'Le Tholonet Restaurants',query:'Le Tholonet restaurant'}],
+      [{label:'Beaune Familienhotel',query:'family hotel breakfast parking Beaune'},{label:'Dijon Süd Hotel',query:'family hotel breakfast parking Dijon Sud'},{label:'Langres Hotel',query:'family hotel breakfast parking Langres'}],
+      [{label:'Tankstelle nahe Route',query:'petrol station highway France Germany route'},{label:'Rastplatz Frankreich Deutschland',query:'aire autoroute France Germany family stop'},{label:'Darmstadt Pizza',query:'pizza Darmstadt'}]
+    ];
     function verdict(item){ if(item.type==='Strand') return 'Sehr passend, solange ihr Strömung, Sonne und Pausen ernst nehmt. Vormittag oder später Nachmittag ist meist angenehmer als Mittag.'; if(item.type==='Aktivität') return 'Sehr guter Baustein für 8 und 10 Jahre, weil daraus ein echtes Erlebnis wird.'; if(item.type==='Ausflug') return 'Lohnend, wenn ihr ihn schlank haltet: ein klares Ziel, keine zweite große Station, gute Rückkehrzeit.'; return 'Guter Baustein, wenn ihr ihn als flexible Option versteht und nicht als Pflichttermin.'; }
     function render(title, eyebrow, body, side){ root.innerHTML = `<p class="section-kicker">${eyebrow}</p><h1>${title}</h1><div class="detail-grid"><section>${body}</section><aside>${side}<div class="side-card"><h3>Vor Ort prüfen</h3><ul><li>Öffnungszeiten</li><li>Parken</li><li>Reservierung</li><li>Hitze / Wetter</li></ul></div></aside></div>`; document.title = `${title} · France 2026`; }
     if(type==='destination'){
@@ -31,8 +52,8 @@
       render(item.title,'Stationsguide',`<p class="detail-lead">${item.deep || item.story}</p><h3>Warum das für euch passt</h3><p>${item.familyAngle || item.story}</p><h3>Highlights</h3>${list(item.highlights)}<h3>Konkrete Tipps</h3>${list(item.tips)}`,links(item.links));
     } else if(type==='day'){
       const item = data.days[Number(id)];
-      const related = data.pois.filter(p => p.place === item.place).slice(0,4);
-      render(item.title,`${item.date} · ${item.place}`,`<p class="detail-lead">${item.focus || item.mood}</p><h3>Entspannt</h3><p>${item.calm}</p><h3>Aktiv</h3><p>${item.active}</p><h3>Alternative</h3><p>${item.fallback}</p><h3>Einordnung</h3><p>Nutzt den Tag als Entscheidungsbaum: Energie hoch heißt aktive Variante, Hitze oder müde Kinder heißt entspannte Variante.</p>`, related.length ? `<div class="side-card"><h3>Passende Orte</h3>${related.map(p => `<a href="${mapsLink(p.query)}" target="_blank" rel="noopener">${p.name}</a>`).join('')}</div>` : '');
+      const curated = dayLinks[Number(id)] || [];
+      render(item.title,`${item.date} · ${item.place}`,`<p class="detail-lead">${item.focus || item.mood}</p><h3>Entspannt</h3><p>${item.calm}</p><h3>Aktiv</h3><p>${item.active}</p><h3>Alternative</h3><p>${item.fallback}</p><h3>Einordnung</h3><p>Nutzt den Tag als Entscheidungsbaum: Energie hoch heißt aktive Variante, Hitze oder müde Kinder heißt entspannte Variante.</p>`, links(curated));
     } else if(type==='poi'){
       const item = data.pois[Number(id)];
       render(item.name,`${item.type} · ${item.place}`,`<p class="detail-lead">${item.text}</p><h3>Warum lohnt sich das?</h3><p>${item.why || item.text}</p><h3>Praktische Tipps</h3>${list(item.tips)}<h3>Familienfazit</h3><p>${verdict(item)}</p>`,`<a class="maps-button" href="${mapsLink(item.query)}" target="_blank" rel="noopener">In Google Maps öffnen</a>${links(item.links)}`);
