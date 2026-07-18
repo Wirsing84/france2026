@@ -120,3 +120,13 @@ window.FRANCE2026 = {
     { title: "Technik", items: ["Handylader", "USB-C", "Kamera", "Kindle", "Airtags", "Offline-Karten", "Ausweise digital", "Buchungsinfos"] }
   ]
 };
+
+(() => {
+  const params = new URLSearchParams(location.search);
+  const isDetailPage = location.pathname.endsWith('/detail.html') || location.pathname.endsWith('detail.html') || params.has('type');
+  if (!isDetailPage) return;
+  const script = document.createElement('script');
+  script.src = 'restaurant-recs.js?v=20260718-1';
+  script.defer = true;
+  document.head.appendChild(script);
+})();
